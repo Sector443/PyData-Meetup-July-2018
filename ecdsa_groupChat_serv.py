@@ -8,6 +8,7 @@ from nacl.encoding import Base64Encoder
 import os, fnmatch
 import base64
 
+#Server intialization [start]
 def check_keys(pattern, path):
     result = []
     for root, dirs, files in os.walk(path):
@@ -17,6 +18,7 @@ def check_keys(pattern, path):
     return result
 
 if check_keys('*Key.txt', os.getcwd()) == []:
+    print("[Server keys not found, generating fresh keys]")
     serv_priv_key = PrivateKey.generate()
     encoded_priv_key = serv_priv_key.encode(encoder=Base64Encoder)
     serv_pub_key = serv_priv_key.public_key
@@ -46,9 +48,10 @@ Port = int(sys.argv[2])
 server.bind((IP_address, Port))
 server.listen(200)
 list_of_clients = []
- 
+#Server intialization [end]
+
 def clientthread(conn, addr):
-    conn.send("=>[Welcome to PyData encrypted chatroom]<=")
+    conn.send("=>[Welcome to PyData encrypted chatroom]<= \n made by CJHackerz@Sector443")
     
     while True:
             try:

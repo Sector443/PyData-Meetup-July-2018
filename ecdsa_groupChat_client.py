@@ -5,6 +5,8 @@ from nacl.public import PublicKey, SealedBox
 from nacl.encoding import Base64Encoder
 import base64
 
+
+#Client intialisation
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 if len(sys.argv) != 3:
     print("Correct usage: script, IP address, port number")
@@ -12,10 +14,12 @@ if len(sys.argv) != 3:
 IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
 server.connect((IP_address, Port))
+print(server.recv(2048)) #Gets banner from server
 print("Requesting public key...")
 server.send("AUTHREQ")
 serv_pub_key = PublicKey(server.recv(2048), encoder=Base64Encoder)
 
+#Message encryption function
 def msg_encrypt(msg, key):
     sealed_box = SealedBox(key)
     encrypted_msg = sealed_box.encrypt(msg)
